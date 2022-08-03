@@ -18,10 +18,9 @@ appExpress.get('/token', (req, res) => {
 
 appExpress.get('/search_users', (req, res) => {
     const search_term = req.query.q 
-    const noTermUrl = 'https://api.github.com/search/users?q=\'\''
     const url = `https://api.github.com/search/users?q=${search_term}`
 
-    axios.request(search_term ? url : noTermUrl, {
+    axios.request(url, {
             headers: {
                 Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`
             }
