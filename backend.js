@@ -17,43 +17,21 @@ appExpress.get('/token', (req, res) => {
 
 
 appExpress.get('/search_users', (req, res) => {
-    // const url = req.query.url ?? ""
-    let result
-    // console.log('OBJEXCT', req);
     const search_term = req.query.q 
     const noTermUrl = 'https://api.github.com/search/users?q=\'\''
     const url = `https://api.github.com/search/users?q=${search_term}`
-    console.log("url", url)
 
-
-        axios.request(search_term ? url : noTermUrl).then(data => {
-            console.log('USERDATA', data.data)
-            res.json(data.data)
-            // result = data.data
-            return data.data
-        }).catch(function (error) {
-            // handle error
-            // res.json({error: error})
-            console.log(error);
-        })
-
-        
-    // axios.get(url, {
-    //     headers: {
-    //         Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`
-    //     }
-    // }).then((data) => {
-    //     console.log(data?.data)
-    // // res.json(data.data)
-    // res.json(data.data)
-
-    // }).catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   })
-
+    axios.request(search_term ? url : noTermUrl, {
+            headers: {
+                Authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`
+            }
+    }).then(data => {
+        // console.log('HEADER RATE LIMIT', data.headers['x-ratelimit-limit'])
+        // console.log('HEADER RATE REMAINING', data.headers['x-ratelimit-remaining'])
+        res.json(data.data)
+    }).catch(function (error) {
+        console.log("ERROR", error);
+    })
 })
 
-// appExpress.get('/', (req, res) => {
-//     axios.get('https://api.github.com/search/users?q=trev-ro').then(data => console.log(data))
-// })
+
