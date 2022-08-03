@@ -47,7 +47,6 @@ appExpress.get('/users', (req, res) => {
     }).then(data => {
         console.log('HEADER RATE LIMIT', data.headers['x-ratelimit-limit'])
         console.log('HEADER RATE REMAINING', data.headers['x-ratelimit-remaining'])
-        console.log('JSSSSOn', data.json())
         res.json(data.data)
     }).catch(function (error) {
         console.log("ERROR", error);
