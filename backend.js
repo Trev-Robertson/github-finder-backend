@@ -19,9 +19,8 @@ appExpress.get('/token', (req, res, next) => {
 
 
 appExpress.get('/search/users', (req, res, next) => {
-    const search_term = req.query.q 
     const url2 = GITHUB_API + req.url
-
+    console.log('URL2', url2);
     axios.request(url2, {
             headers: {
                 Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`
@@ -39,7 +38,6 @@ appExpress.get('/search/users', (req, res, next) => {
 
 
 appExpress.get('/users', (req, res, next) => {
-    const search_term = req.query.q 
     const url2 = GITHUB_API + req.url
     console.log('URL2', url2);
     axios.request(url2, {
