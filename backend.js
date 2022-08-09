@@ -10,7 +10,7 @@ const GITHUB_API = process.env.REACT_APP_GITHUB_URL
 const appExpress = express()
 appExpress.use(cors())
 
-appExpress.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+appExpress.listen(PORT, () => console.log(`Server running on port ${PORT}`)).on('error', (err) => console.log('BIG ERRORW', err) )
 
 
 // appExpress.get('/token', (req, res, next) => {
@@ -20,8 +20,7 @@ appExpress.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
 
 appExpress.get('/search/users', (req, res, next) => {
-    const url2 = GITHUB_API + req.url
-    // console.log('URL2', url2);
+    const url2 = GITHUB_API + req.url 
     axios.request(url2, {
             headers: {
                 Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`
@@ -29,11 +28,17 @@ appExpress.get('/search/users', (req, res, next) => {
     }).then(data => {
         console.log('HEADER RATE LIMIT /search/users', data.headers['x-ratelimit-limit'])
         console.log('HEADER RATE REMAINING /search/users', data.headers['x-ratelimit-remaining'])
+        res.status(data.status)
         res.json(data.data)
     }).catch(function (error) {
         console.log('ERRORSEARCH', error);
-        res.status(error.response.status)
-        res.json(error)
+        if(error.response){
+            res.status(error.response.status)
+            res.json(error)
+        }
+        else{
+            next(error)
+        }
     })
 })
 
@@ -48,17 +53,22 @@ appExpress.get('/users/:login', (req, res, next) => {
     }).then(data => {
         console.log('HEADER RATE LIMIT /users/:login', data.headers['x-ratelimit-limit'])
         console.log('HEADER RATE REMAINING /users/:login', data.headers['x-ratelimit-remaining'])
+        res.status(data.status)
         res.json(data.data)
     }).catch(function (error) {
-        res.status(error.response.status)
-        res.json(error)
+        console.log('ERRORSEARCH', error);
+        if(error.response){
+            res.status(error.response.status)
+            res.json(error)
+        }
+        else{
+            next(error)
+        }
     })
 })
 
 appExpress.get('/users/:login/repos', (req, res, next) => {
     const url2 = GITHUB_API + req.url 
-    // + '?sort=created&direction=dsc&per_page=10'
-    // console.log('REQ', url2);
     axios.request(url2, {
             headers: {
                 Authorization: `token ${process.env.REACT_APP_GITHUB_TOKEN}`
@@ -66,9 +76,16 @@ appExpress.get('/users/:login/repos', (req, res, next) => {
     }).then(data => {
         console.log('HEADER RATE LIMIT /users/:login/repos', data.headers['x-ratelimit-limit'])
         console.log('HEADER RATE REMAINING /users/:login/repos', data.headers['x-ratelimit-remaining'])
+        res.status(data.status)
         res.json(data.data)
     }).catch(function (error) {
-        res.status(error.response.status)
-        res.json(error)
+        console.log('ERRORSEARCH', error);
+        if(error.response){
+            res.status(error.response.status)
+            res.json(error)
+        }
+        else{
+            next(error)
+        }
     })
 })
